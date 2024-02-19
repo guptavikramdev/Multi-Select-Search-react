@@ -56,7 +56,13 @@ const MultiSelectInput = ({ userList, onChange }) => {
   }, [selectedUserList]);
   return (
     <div className="search_box_conatiner">
-      <div className="search_box" onClick={() => setOpenList(true)}>
+      <div
+        className="search_box"
+        onClick={() => {
+          setOpenList(true);
+          inputRef?.current?.focus();
+        }}
+      >
         {!!selectedUserList.length &&
           selectedUserList.map((user) => (
             <span key={user.id} className="selected_user">
