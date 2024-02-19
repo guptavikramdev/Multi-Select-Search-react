@@ -1,0 +1,111 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: "Courier New", Courier, monospace;
+}
+.conatiner {
+  width: 100%;
+  height: 100vh;
+  background-color: #f8fafc;
+  padding-top: 100px;
+}
+.search_box_conatiner {
+  width: 50%;
+  margin: 0 auto;
+}
+.search_box {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 20px;
+  align-items: center;
+  border-radius: 25px;
+  background-color: #f1f5f9;
+  /* box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); */
+  gap: 10px;
+}
+.search_box_input {
+  border: none;
+  background-color: inherit;
+  font-size: 16px;
+}
+.search_box_input:focus {
+  outline: none;
+}
+.search_suggetion {
+  margin-top: 10px;
+  max-height: 350px;
+  overflow-y: scroll;
+  background: #fff;
+  border-radius: 5px;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+.search_suggetion::-webkit-scrollbar {
+  display: none;
+}
+.list_items {
+  padding: 10px;
+  list-style: none;
+}
+.list_item {
+  cursor: pointer;
+  display: flex;
+  gap: 20px;
+  padding: 10px;
+  align-items: center;
+  border-bottom: 1px solid #f1f5f9;
+}
+.list_item:last-child {
+  border-bottom: none;
+}
+.list_item:hover {
+  background-color: #f1f5f9;
+  border-radius: 5px;
+}
+.list_img {
+  height: 30px;
+}
+.selected_user {
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 25px;
+  background-color: #1e293b;
+  color: #f1f5f9;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.selected_user_img {
+  height: 20px;
+}
+.remove_btn {
+  background: #f1f5f9;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  display: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+}
+.results {
+  width: 50%;
+  margin: 0 auto;
+  margin-bottom: 20px;
+  color: #1e293b;
+  background-color: #f1f5f9;
+  padding: 20px;
+  border-radius: 5px;
+}
+.results h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
