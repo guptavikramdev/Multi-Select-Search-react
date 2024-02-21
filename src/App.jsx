@@ -13,7 +13,11 @@ function App() {
     }
     fetchCountry();
   }, []);
-
+  const getYearRange = (start, stop, step) =>
+    Array.from(
+      { length: (stop - start) / step + 1 },
+      (_, i) => start + i * step
+    );
   return (
     <div className="container">
       <MultiSelectInput
@@ -23,8 +27,8 @@ function App() {
         onChange={(selected) => setSelectedUser(selected)}
       />
       <MultiSelectInput
-        option={country}
-        placeholder="Select Country"
+        option={getYearRange(2024, 2024 - 10, -1)}
+        placeholder="Select Year"
         selectedItems={selectedUser}
         onChange={(selected) => setSelectedUser(selected)}
       />

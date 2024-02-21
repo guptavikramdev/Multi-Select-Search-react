@@ -78,6 +78,13 @@ body {
 .multi_select_search_input::placeholder {
   color: var(--placeHolderColor);
 }
+.multi_select_icon > svg {
+  transition: all 0.5s;
+  transform: rotate(0deg);
+}
+.multi_select_icon.active > svg {
+  transform: rotate(180deg);
+}
 
 .suggetion_list {
   position: absolute;
@@ -88,7 +95,7 @@ body {
   background: var(--background);
   padding: 10px 20px;
   left: 0;
-  top: 50px;
+  top: 100%;
   border-radius: 5px;
   box-shadow: var(--boxShadow);
   transform-origin: 100% 0%;
@@ -97,6 +104,7 @@ body {
   opacity: 0;
   transition: 0.4s ease;
   z-index: 10;
+  margin-top: 10px;
 }
 .suggetion_list.active {
   scale: 1;
