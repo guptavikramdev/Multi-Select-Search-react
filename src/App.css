@@ -147,3 +147,12 @@ body {
 .remove_btn svg {
   fill: #f1f5f9;
 }
+@media only screen and (max-width: 700px) {
+  .container {
+    flex-direction: column;
+    padding: 0 20px;
+  }
+  .multi_select_box_container {
+    width: 100%;
+  }
+}
