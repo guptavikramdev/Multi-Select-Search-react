@@ -14,10 +14,14 @@ const MultiSelectInput = ({
   const [selectedUserID, setselectedUserID] = useState(new Set());
   const [filetrOptionList, setFiletrOptionList] = useState([]);
   const [openList, setOpenList] = useState(false);
+  const colorCode = ["#e11d48", "#1e293b", "#3b82f6", "#22c55e", "#6d28d9"];
   const inputRef = useRef(null);
   const divRef = useRef(null);
   const objeRef = useRef(null);
   const iconRef = useRef(null);
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const labelRef = colorCode.map(() => useRef(null));
   const ref = useOutsideClick(() => {
     divRef.current.classList.remove("active");
     iconRef.current.classList.remove("active");
@@ -81,6 +85,13 @@ const MultiSelectInput = ({
     divRef.current.classList.add("active");
     setFiletrOptionList(searchresult);
   };
+  const handleChangeColor = (colorCode) => {
+    labelRef.forEach((ref) => {
+      if (ref.current) {
+        ref.current.style.backgroundColor = colorCode;
+      }
+    });
+  };
   useEffect(() => {
     setFiletrOptionList(option);
     objeRef.current = option.length > 0 ? Object.keys(option[0]) : null;
@@ -90,85 +101,107 @@ const MultiSelectInput = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedOptionList]);
   return (
-    <div className="multi_select_box_container" onClick={handleOpen} ref={ref}>
-      <div className="multi_select_box">
-        <div className="multi_select_search_box">
-          {!!selectedOptionList.length &&
-            selectedOptionList.map((user) => {
-              if (typeof user === "object" && user !== null) {
-                const objKey = Object.keys(user);
+    <div className="main">
+      {!!selectedOptionList.length && (
+        <div className="colors">
+          {colorCode.map((color) => (
+            <button
+              key={color}
+              className="colors_btn"
+              style={{ background: color }}
+              onClick={() => handleChangeColor(color)}
+            ></button>
+          ))}
+        </div>
+      )}
+      <div
+        className="multi_select_box_container"
+        onClick={handleOpen}
+        ref={ref}
+      >
+        <div className="multi_select_box">
+          <div className="multi_select_search_box">
+            {!!selectedOptionList.length &&
+              selectedOptionList.map((user, index) => {
+                if (typeof user === "object" && user !== null) {
+                  const objKey = Object.keys(user);
+                  return (
+                    <span
+                      key={user[objKey[0]]}
+                      className="multi_select_label"
+                      onClick={(e) => removeSelectedUser(e, user?.id)}
+                      ref={labelRef[index]}
+                    >
+                      <span>{user[[objKey[1]]]}</span>
+                      <button className="remove_btn">
+                        <RemoveIcon />
+                      </button>
+                    </span>
+                  );
+                } else {
+                  return (
+                    <span
+                      key={user}
+                      className="multi_select_label"
+                      ref={labelRef[index]}
+                    >
+                      <span>{user}</span>
+                      <button
+                        className="remove_btn"
+                        onClick={(e) => removeSelectedUser(e, user)}
+                      >
+                        <RemoveIcon />
+                      </button>
+                    </span>
+                  );
+                }
+              })}
+            <input
+              type="text"
+              className="multi_select_search_input"
+              placeholder={placeholder || "Search..."}
+              value={searchText}
+              onChange={hadleSearch}
+              onKeyDown={handleBackSpace}
+              ref={inputRef}
+            />
+          </div>
+          <div className="multi_select_icon" ref={iconRef}>
+            <ArrowIcon />
+          </div>
+        </div>
+        <div className="suggetion_list" ref={divRef}>
+          <ul>
+            {filetrOptionList?.map((list) => {
+              if (typeof list === "object" && list !== null) {
+                const objKey = objeRef.current;
                 return (
-                  <span
-                    key={user[objKey[0]]}
-                    className="multi_select_label"
-                    onClick={(e) => removeSelectedUser(e, user?.id)}
-                  >
-                    <span>{user[[objKey[1]]]}</span>
-                    <button className="remove_btn">
-                      <RemoveIcon />
-                    </button>
-                  </span>
+                  !selectedUserID.has(list[objKey[0]]) && (
+                    <li
+                      key={list[objKey[0]]}
+                      className="list_item"
+                      onClick={(e) => handleSelectedUser(e, list)}
+                    >
+                      <span>{list[objKey[1]]}</span>
+                    </li>
+                  )
                 );
               } else {
                 return (
-                  <span key={user} className="multi_select_label">
-                    <span>{user}</span>
-                    <button
-                      className="remove_btn"
-                      onClick={(e) => removeSelectedUser(e, user)}
+                  !selectedUserID.has(list) && (
+                    <li
+                      key={list}
+                      className="list_item"
+                      onClick={(e) => handleSelectedUser(e, list)}
                     >
-                      <RemoveIcon />
-                    </button>
-                  </span>
+                      <span>{list}</span>
+                    </li>
+                  )
                 );
               }
             })}
-          <input
-            type="text"
-            className="multi_select_search_input"
-            placeholder={placeholder || "Search..."}
-            value={searchText}
-            onChange={hadleSearch}
-            onKeyDown={handleBackSpace}
-            ref={inputRef}
-          />
+          </ul>
         </div>
-        <div className="multi_select_icon" ref={iconRef}>
-          <ArrowIcon />
-        </div>
-      </div>
-
-      <div className="suggetion_list" ref={divRef}>
-        <ul>
-          {filetrOptionList?.map((list) => {
-            if (typeof list === "object" && list !== null) {
-              const objKey = objeRef.current;
-              return (
-                !selectedUserID.has(list[objKey[0]]) && (
-                  <li
-                    key={list[objKey[0]]}
-                    className="list_item"
-                    onClick={(e) => handleSelectedUser(e, list)}
-                  >
-                    <span>{list[objKey[1]]}</span>
-                  </li>
-                )
-              );
-            } else {
-              return (
-                !selectedUserID.has(list) && (
-                  <li
-                    key={list}
-                    className="list_item"
-                    onClick={(e) => handleSelectedUser(e, list)}
-                  >
-                    <span>{list}</span>
-                  </li>
-                )
-              );
-            }
-          })}
-        </ul>
       </div>
     </div>
   );

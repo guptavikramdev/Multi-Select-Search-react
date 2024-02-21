@@ -4,7 +4,7 @@
   --background: #111827;
   --border: 1px solid #1f2937;
   --boxShadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --acvtiveColor: #4c1d95;
+  --acvtiveColor: #6d28d9;
   --hoverColor: rgba(76, 29, 149, 0.09);
   --placeHolderColor: #64748b;
 }
@@ -28,6 +28,7 @@ body {
   gap: 20px;
   background: var(--bodyBackground);
 }
+
 .multi_select_box_container {
   position: relative;
   width: 500px;
@@ -140,7 +141,7 @@ body {
   gap: 10px;
 }
 .remove_btn {
-  background: #751efbb5;
+  background: hsla(255, 100%, 100%, 0.2);
   border: none;
   outline: none;
   cursor: pointer;
@@ -163,4 +164,20 @@ body {
   .multi_select_box_container {
     width: 100%;
   }
+  .main {
+    width: 100%;
+  }
+}
+.colors {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.colors_btn {
+  border: none;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
 }
