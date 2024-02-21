@@ -1,111 +1,149 @@
+:root {
+  --color: #94a3b8;
+  --bodyBackground: #020617;
+  --background: #111827;
+  --border: 1px solid #1f2937;
+  --boxShadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --acvtiveColor: #4c1d95;
+  --hoverColor: rgba(76, 29, 149, 0.09);
+  --placeHolderColor: #64748b;
+}
 * {
   margin: 0;
   padding: 0;
+  -webkit-tap-highlight-color: transparent;
   box-sizing: border-box;
 }
 body {
-  font-family: "Courier New", Courier, monospace;
+  font-family: Arial, Helvetica, sans-serif;
 }
-.conatiner {
+.container {
   width: 100%;
   height: 100vh;
-  background-color: #f8fafc;
-  padding-top: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  flex-direction: row;
+  gap: 20px;
+  background: var(--bodyBackground);
 }
-.search_box_conatiner {
-  width: 50%;
-  margin: 0 auto;
+.multi_select_box_container {
+  position: relative;
+  width: 500px;
+  border-radius: 5px;
+  border: var(--border);
+  padding: 10px 20px;
+  position: relative;
+  background-color: var(--background);
+  color: var(--color);
+  box-shadow: var(--boxShadow);
+  cursor: pointer;
 }
-.search_box {
+.multi_select {
+  width: 100%;
+}
+.multi_select_box {
   width: 100%;
   display: flex;
-  flex-wrap: wrap;
-  padding: 20px;
   align-items: center;
-  border-radius: 25px;
-  background-color: #f1f5f9;
-  /* box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); */
+  justify-content: space-between;
+}
+.multi_select_search_box {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
   gap: 10px;
 }
-.search_box_input {
+.multi_select_box_search {
+  width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.multi_select_search {
+  width: 100%;
+}
+.multi_select_search_input {
   border: none;
   background-color: inherit;
   font-size: 16px;
+  color: var(--color);
+  min-width: 10px;
+  max-width: 99.99%;
 }
-.search_box_input:focus {
+.multi_select_search_input:focus {
   outline: none;
 }
-.search_suggetion {
-  margin-top: 10px;
-  max-height: 350px;
-  overflow-y: scroll;
-  background: #fff;
-  border-radius: 5px;
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+.multi_select_search_input::placeholder {
+  color: var(--placeHolderColor);
 }
-.search_suggetion::-webkit-scrollbar {
+
+.suggetion_list {
+  position: absolute;
+  width: 100%;
+  max-height: 300px;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  background: var(--background);
+  padding: 10px 20px;
+  left: 0;
+  top: 50px;
+  border-radius: 5px;
+  box-shadow: var(--boxShadow);
+  transform-origin: 100% 0%;
+  scale: 0;
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.4s ease;
+  z-index: 10;
+}
+.suggetion_list.active {
+  scale: 1;
+  visibility: visible;
+  opacity: 1;
+}
+.suggetion_list::-webkit-scrollbar {
   display: none;
 }
-.list_items {
-  padding: 10px;
+.suggetion_list ul {
   list-style: none;
 }
-.list_item {
+.suggetion_list ul li {
+  padding: 10px;
+  transition: all 0.5s ease;
+  margin-bottom: 5px;
+  color: var(--color);
   cursor: pointer;
-  display: flex;
-  gap: 20px;
-  padding: 10px;
-  align-items: center;
-  border-bottom: 1px solid #f1f5f9;
 }
-.list_item:last-child {
-  border-bottom: none;
-}
-.list_item:hover {
-  background-color: #f1f5f9;
+.suggetion_list ul li:hover {
+  background-color: var(--acvtiveColor);
   border-radius: 5px;
+  box-shadow: var(--boxShadow);
 }
-.list_img {
-  height: 30px;
-}
-.selected_user {
-  padding: 10px;
+.multi_select_label {
+  padding: 5px 10px;
   font-size: 14px;
   border-radius: 25px;
-  background-color: #1e293b;
+  background-color: var(--acvtiveColor);
   color: #f1f5f9;
   display: flex;
   align-items: center;
   gap: 10px;
 }
-.selected_user_img {
-  height: 20px;
-}
 .remove_btn {
-  background: #f1f5f9;
+  background: #751efbb5;
   border: none;
   outline: none;
   cursor: pointer;
-  display: none;
   border-radius: 50%;
   width: 20px;
   height: 20px;
   display: grid;
   justify-content: center;
   align-items: center;
+  box-shadow: var(--boxShadow);
 }
-.results {
-  width: 50%;
-  margin: 0 auto;
-  margin-bottom: 20px;
-  color: #1e293b;
-  background-color: #f1f5f9;
-  padding: 20px;
-  border-radius: 5px;
-}
-.results h2 {
-  text-align: center;
-  margin-bottom: 20px;
+.remove_btn svg {
+  fill: #f1f5f9;
 }

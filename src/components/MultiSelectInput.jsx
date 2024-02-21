@@ -1,122 +1,116 @@
 /* eslint-disable react/prop-types */
 import { useState, useRef, useEffect } from "react";
 import RemoveIcon from "./icons/RemoveIcon";
-import useDebounce from "../utils/useDebounce";
+import ArrowIcon from "./icons/ArrowIcon";
 import useOutsideClick from "../utils/useOutsideClick";
-const MultiSelectInput = ({ userList, onChange }) => {
+const MultiSelectInput = ({
+  option,
+  selectedItems = [],
+  placeholder = "",
+  onChange,
+}) => {
   const [searchText, setSearchText] = useState("");
-  const [selectedUserList, setSelectedUserList] = useState([]);
+  const [selectedOptionList, setSelectedOptionList] = useState(selectedItems);
   const [selectedUserID, setselectedUserID] = useState(new Set());
   const [filetrUserList, setFiletrUserList] = useState([]);
   const [openList, setOpenList] = useState(false);
-  const searchDebounce = useDebounce(searchText, 500);
   const inputRef = useRef(null);
-  const listRef = useOutsideClick(() => {
+  const divRef = useRef(null);
+  const ref = useOutsideClick(() => {
+    divRef.current.classList.remove("active");
     setOpenList(false);
   });
-  const handleSelectedUser = (id, image, firstName, lastName) => {
-    setSelectedUserList([
-      ...selectedUserList,
-      { id, image, firstName, lastName },
-    ]);
-    setselectedUserID(new Set([...selectedUserID, id]));
+  const handleOpen = () => {
+    divRef.current.classList.toggle("active");
+    inputRef.current.focus();
+    setOpenList(!openList);
+  };
+  const handleSelectedUser = (e, slectedOption) => {
+    e.stopPropagation();
+    setSelectedOptionList([...selectedOptionList, slectedOption]);
+    setselectedUserID(new Set([...selectedUserID, slectedOption.id]));
     setSearchText("");
+    divRef.current.classList.remove("active");
     setOpenList(false);
     inputRef?.current?.focus();
   };
-  const removeSelectedUser = (id) => {
-    const removeUser = selectedUserList.filter((user) => user.id !== id);
-    setSelectedUserList(removeUser);
+  const removeSelectedUser = (e, id) => {
+    e.stopPropagation();
+    const removeUser = selectedOptionList.filter((user) => user.id !== id);
+    setSelectedOptionList(removeUser);
     const updateUserId = new Set(selectedUserID);
     updateUserId.delete(id);
     setselectedUserID(updateUserId);
   };
   const handleBackSpace = (e) => {
-    if (e.code == "Backspace" && selectedUserList.length > 0 && !searchText) {
-      const lastIndex = selectedUserList[selectedUserList.length - 1];
-      removeSelectedUser(lastIndex.id);
+    if (e.code == "Backspace" && selectedOptionList.length > 0 && !searchText) {
+      const lastIndex = selectedOptionList[selectedOptionList.length - 1];
+      removeSelectedUser(e, lastIndex.id);
     }
   };
   const hadleSearch = (e) => {
     setSearchText(e.target.value);
+    const searchresult = option.filter((user) =>
+      user.name.toLowerCase().includes(searchText.toLowerCase())
+    );
+    divRef.current.classList.add("active");
+    setFiletrUserList(searchresult);
   };
   useEffect(() => {
-    const searchresult = userList.filter((user) =>
-      user.firstName.toLowerCase().includes(searchText.toLowerCase())
-    );
-    setFiletrUserList(searchresult);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchDebounce]);
+    setFiletrUserList(option);
+  }, [option, openList]);
   useEffect(() => {
-    setFiletrUserList(userList);
-  }, [userList]);
-  useEffect(() => {
-    onChange(selectedUserList);
+    onChange(selectedOptionList);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedUserList]);
+  }, [selectedOptionList]);
   return (
-    <div className="search_box_conatiner">
-      <div
-        className="search_box"
-        onClick={() => {
-          setOpenList(true);
-          inputRef?.current?.focus();
-        }}
-      >
-        {!!selectedUserList.length &&
-          selectedUserList.map((user) => (
-            <span key={user.id} className="selected_user">
-              <img src={user?.image} className="selected_user_img" />
-              <span>
-                {user?.firstName} {user?.lastName}
+    <div className="multi_select_box_container" onClick={handleOpen} ref={ref}>
+      <div className="multi_select_box">
+        <div className="multi_select_search_box">
+          {!!selectedOptionList.length &&
+            selectedOptionList.map((user) => (
+              <span key={user.id} className="multi_select_label">
+                <span>{user?.name}</span>
+                <button
+                  className="remove_btn"
+                  onClick={(e) => removeSelectedUser(e, user?.id)}
+                >
+                  <RemoveIcon />
+                </button>
               </span>
-              <button
-                className="remove_btn"
-                onClick={() => removeSelectedUser(user?.id)}
-              >
-                <RemoveIcon />
-              </button>
-            </span>
-          ))}
-        <input
-          type="text"
-          className="search_box_input"
-          placeholder="Search user"
-          value={searchText}
-          onChange={hadleSearch}
-          onKeyDown={handleBackSpace}
-          ref={inputRef}
-        />
-      </div>
-      {openList && (
-        <div className="search_suggetion" ref={listRef}>
-          <ul className="list_items">
-            {filetrUserList?.map(
-              (list) =>
-                !selectedUserID.has(list.id) && (
-                  <li
-                    key={list.id}
-                    tabIndex={-1}
-                    className="list_item"
-                    onClick={() =>
-                      handleSelectedUser(
-                        list.id,
-                        list.image,
-                        list.firstName,
-                        list.lastName
-                      )
-                    }
-                  >
-                    <img src={list.image} className="list_img" loading="lazy" />
-                    <span>
-                      {list.firstName} {list.lastName}
-                    </span>
-                  </li>
-                )
-            )}
-          </ul>
+            ))}
+          <input
+            type="text"
+            className="multi_select_search_input"
+            placeholder={placeholder || "Search..."}
+            value={searchText}
+            onChange={hadleSearch}
+            onKeyDown={handleBackSpace}
+            ref={inputRef}
+          />
         </div>
-      )}
+        <div className="multi_select_icon">
+          <ArrowIcon />
+        </div>
+      </div>
+
+      <div className="suggetion_list" ref={divRef}>
+        <ul>
+          {filetrUserList?.map(
+            (list) =>
+              !selectedUserID.has(list.id) && (
+                <li
+                  key={list.id}
+                  tabIndex={-1}
+                  className="list_item"
+                  onClick={(e) => handleSelectedUser(e, list)}
+                >
+                  <span>{list.name}</span>
+                </li>
+              )
+          )}
+        </ul>
+      </div>
     </div>
   );
 };

@@ -1,34 +1,32 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 import MultiSelectInput from "./components/MultiSelectInput";
 
 function App() {
-  const [userList, setUserList] = useState([]);
+  const [country, setCountry] = useState([]);
   const [selectedUser, setSelectedUser] = useState([]);
-  const divRef = useRef();
   useEffect(() => {
-    async function fetchData() {
-      const response = await fetch(`https://dummyjson.com/users`);
-      const data = await response.json();
-      setUserList(data.users);
+    async function fetchCountry() {
+      const response = await fetch("https://laravel-world.com/api/countries");
+      const country = await response.json();
+      setCountry(country.data);
     }
-    fetchData();
+    fetchCountry();
   }, []);
-  useEffect(() => {
-    if (divRef.current) {
-      divRef.current.innerHTML = `<code>${JSON.stringify(selectedUser)}</code>`;
-    }
-  }, [selectedUser]);
-  return (
-    <div className="conatiner">
-      <div className="results">
-        <h2>Multi Select Search</h2>
-        <div ref={divRef}></div>
-      </div>
 
+  return (
+    <div className="container">
       <MultiSelectInput
-        userList={userList}
-        onChange={(data) => setSelectedUser(data)}
+        option={country}
+        placeholder="Select Country"
+        selectedItems={selectedUser}
+        onChange={(selected) => setSelectedUser(selected)}
+      />
+      <MultiSelectInput
+        option={country}
+        placeholder="Select Country"
+        selectedItems={selectedUser}
+        onChange={(selected) => setSelectedUser(selected)}
       />
     </div>
   );
