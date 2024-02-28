@@ -14,14 +14,10 @@ const MultiSelectInput = ({
   const [selectedUserID, setselectedUserID] = useState(new Set());
   const [filetrOptionList, setFiletrOptionList] = useState([]);
   const [openList, setOpenList] = useState(false);
-  const colorCode = ["#e11d48", "#1e293b", "#3b82f6", "#22c55e", "#6d28d9"];
   const inputRef = useRef(null);
   const divRef = useRef(null);
   const objeRef = useRef(null);
   const iconRef = useRef(null);
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const labelRef = colorCode.map(() => useRef(null));
   const ref = useOutsideClick(() => {
     divRef.current.classList.remove("active");
     iconRef.current.classList.remove("active");
@@ -85,13 +81,6 @@ const MultiSelectInput = ({
     divRef.current.classList.add("active");
     setFiletrOptionList(searchresult);
   };
-  const handleChangeColor = (colorCode) => {
-    labelRef.forEach((ref) => {
-      if (ref.current) {
-        ref.current.style.backgroundColor = colorCode;
-      }
-    });
-  };
   useEffect(() => {
     setFiletrOptionList(option);
     objeRef.current = option.length > 0 ? Object.keys(option[0]) : null;
@@ -102,18 +91,6 @@ const MultiSelectInput = ({
   }, [selectedOptionList]);
   return (
     <div className="main">
-      {!!selectedOptionList.length && (
-        <div className="colors">
-          {colorCode.map((color) => (
-            <button
-              key={color}
-              className="colors_btn"
-              style={{ background: color }}
-              onClick={() => handleChangeColor(color)}
-            ></button>
-          ))}
-        </div>
-      )}
       <div
         className="multi_select_box_container"
         onClick={handleOpen}
@@ -122,7 +99,7 @@ const MultiSelectInput = ({
         <div className="multi_select_box">
           <div className="multi_select_search_box">
             {!!selectedOptionList.length &&
-              selectedOptionList.map((user, index) => {
+              selectedOptionList.map((user) => {
                 if (typeof user === "object" && user !== null) {
                   const objKey = Object.keys(user);
                   return (
@@ -130,7 +107,6 @@ const MultiSelectInput = ({
                       key={user[objKey[0]]}
                       className="multi_select_label"
                       onClick={(e) => removeSelectedUser(e, user?.id)}
-                      ref={labelRef[index]}
                     >
                       <span>{user[[objKey[1]]]}</span>
                       <button className="remove_btn">
@@ -140,11 +116,7 @@ const MultiSelectInput = ({
                   );
                 } else {
                   return (
-                    <span
-                      key={user}
-                      className="multi_select_label"
-                      ref={labelRef[index]}
-                    >
+                    <span key={user} className="multi_select_label">
                       <span>{user}</span>
                       <button
                         className="remove_btn"

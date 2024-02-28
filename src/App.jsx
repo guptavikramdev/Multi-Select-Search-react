@@ -20,13 +20,13 @@ function App() {
     );
   return (
     <div className="container">
-      
       <MultiSelectInput
         option={country}
         placeholder="Select Country"
         selectedItems={selectedUser}
         onChange={(selected) => setSelectedUser(selected)}
       />
+
       <MultiSelectInput
         option={getYearRange(2024, 2024 - 10, -1)}
         placeholder="Select Year"
